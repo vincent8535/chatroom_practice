@@ -4,7 +4,7 @@ const User = mongoose.model('User', memberschema);
 
 module.exports = function regist(data){
 	let result = {}
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => { //新增使用者
 		User.create(data, (err) =>{
 			if(err){
 				result.status = "Create Error";

@@ -32,7 +32,6 @@
 			for( var i=0; i<result.length; i++){
 				createmember(result[i]);
 			}
-			//console.log(checkchange(updatebtn));
 			
 			function createmember(data){
 				var memberBox = document.createElement("div")
@@ -73,7 +72,7 @@
 				memberBox.appendChild(updatebtn);
 				memberBox.appendChild(deletebtn);
 				content.appendChild(memberBox);
-				updatebtn.addEventListener("click", function(){
+				updatebtn.addEventListener("click", function(){ //更新呼叫Post
 					if(checkchange(this)){
 						var req = {};
 						var box = this.parentNode;
@@ -108,7 +107,7 @@
 						console.log("same");
 					}
 				});
-				deletebtn.addEventListener("click", function(){
+				deletebtn.addEventListener("click", function(){ //刪除呼叫delete
 					var req = {};
 					var box = this.parentNode;
 					req.user = box.id;
@@ -143,7 +142,7 @@
 			
 			}
 			
-			function checkchange(element){
+			function checkchange(element){ //確認表單資料符合規定
 				var parent = element.parentNode;
 				var id = result.map(function(item,index, array){return item.user;}).indexOf(parent.id);
 				var newpswd = parent.getElementsByClassName("pswd")[0].value;

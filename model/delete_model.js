@@ -4,7 +4,7 @@ const User = mongoose.model('User', memberschema);
 
 module.exports = function erase(data){
 	result = {};
-	return new Promise((resolve, reject) =>{
+	return new Promise((resolve, reject) =>{ //刪除使用者
 		User.deleteOne(data, (err, res)=>{
 			if(err){
 				result.status = "delete fail";

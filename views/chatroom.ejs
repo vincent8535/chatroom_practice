@@ -32,10 +32,7 @@
     </div>
     <script>
 		
-        document.addEventListener("DOMContentLoaded", () => {
-			//var username='${sessionScope.user}';
-
-			//document.getElementById("name").value = username;
+        document.addEventListener("DOMContentLoaded", () => { //頁面讀取完才執行
             var status = document.getElementById("status");
             var online = document.getElementById("online");
 			var content = document.getElementById("content");
@@ -75,13 +72,13 @@
 					}
 				}
 				var time = new Date()
-				var datetime = (time.getMonth()+1)+"/"+time.getDate() +"/"+time.getHours()+":"+time.getMinutes();
+				var datetime = (time.getMonth()+1)+"/"+time.getDate() +"/"+time.getHours()+":"+time.getMinutes(); //格式 mm/dd/00:00
 				formData["time"] = datetime;
 				
 				socket.emit("send", formData);
 			});
 			
-			socket.on("msg", addMsgToBox);
+			socket.on("msg", addMsgToBox); //增加訊息
 			
 			function addMsgToBox (d) {
 				var msgBox = document.createElement("div")
@@ -127,7 +124,7 @@
 				}
 			}
 			
-			function rmMsgFromBox(){
+			function rmMsgFromBox(){ //移除過多訊息
 				var childs = content.children;
 				childs[0].remove();
 			}

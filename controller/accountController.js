@@ -7,20 +7,22 @@ const updateaction = require('../model/update_model');
 const deleteaction = require('../model/delete_model');
 const getaction = require('../model/get_model');
 
-module.exports.index = (req, res) => {res.sendFile(rootPath+'/views/index.html');};
-module.exports.chatroom = (req, res) => {
+module.exports.index = (req, res) => {res.sendFile(rootPath+'/views/index.html');};//首頁
 
-	console.log(req.session.user);
+module.exports.chatroom = (req, res) => { //聊天室頁面
+
+	//console.log(req.session.user);
 	res.render('chatroom', {user: req.session.user});
-//res.sendFile(rootPath+'/view/chatroom.html');
+	//res.sendFile(rootPath+'/view/chatroom.html');
 };
 
-module.exports.backstage = (req, res) =>{
+module.exports.backstage = (req, res) =>{ //後台
 	getaction().then((result)=>{
 		res.render('member', {member: result.member});
 	});
 };
-module.exports.update = (req, res) => {
+
+module.exports.update = (req, res) => { //更新使用者資料
 	req.body = JSON.parse(req.body);
 	const data = {
 		user: req.body.user,
@@ -35,27 +37,21 @@ module.exports.update = (req, res) => {
 		});
 	});
 };
-	//res.sendFile(rootPath+'/view/member.html')};
-module.exports.regist = (req, res) => {
+
+module.exports.regist = (req, res) => { //註冊使用者
 	const data ={
 		user: req.body.user,
 		pswd: req.body.pswd
 	};
 	registaction(data).then((result) => {
-		/*res.json({
-			result: result
-		})*/
 		req.session.user = data.user;
 		res.redirect('/chatroom');
 	},(err) => {
-		/*res.json({
-			err: err
-		});*/
 		res.redirect('/');
 	});
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res) => { //登入
 	const data={
 		user: req.body.user,
 		pswd: req.body.pswd
@@ -72,7 +68,7 @@ module.exports.login = (req, res) => {
 			});*/
 			req.session.user = account.user;
 			console.log(account.permision);
-			if(account.permision === "author"){
+			if(account.permision === "author"){ //管理者權限
 				console.log('tobackstatge');
 				res.redirect('/member');
 				
@@ -101,7 +97,7 @@ module.exports.login = (req, res) => {
 		});
 };
 
-module.exports.erase = (req, res) => {
+module.exports.erase = (req, res) => { //移除帳號
 	req.body = JSON.parse(req.body);
 	const data ={
 		user: req.body.user
@@ -118,7 +114,7 @@ module.exports.erase = (req, res) => {
 	});
 };
 
-module.exports.logout = (req, res)=> {
+module.exports.logout = (req, res)=> { //登出
 	if(req.session.user){
 		req.session.destroy(function(){
 			res.redirect('/');

@@ -4,8 +4,7 @@ const User = mongoose.model('User', memberschema);
 
 module.exports = function update(data){
 	let result = {};
-	return new Promise((resolve, reject) =>{
-		console.log("update");
+	return new Promise((resolve, reject) =>{ //更新使用者
 		User.updateOne({user:data.user}, data, (err, res)=>{
 			if(err){
 				

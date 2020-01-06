@@ -9,6 +9,7 @@ let instance;
 let data = [];
 let Max = 10;
 
+//處理聊天室用事件
 class Storage extends EventEmitter{
 	constructor(){
 		super();
@@ -20,7 +21,6 @@ class Storage extends EventEmitter{
 		m.save();
 		
 		this.emit("new_message", msg);
-		//data.push(msg);
 		
 		Message.count().then((count) => {
 			if(count >= Max){
@@ -29,7 +29,6 @@ class Storage extends EventEmitter{
 				});
 			}
 		});
-		//this.emit("new_message", msg);
 	}
 	
 	get(callback){
@@ -44,42 +43,6 @@ class Storage extends EventEmitter{
 	
 	getMax(){
 		return Max;
-	}
-	
-	login(data){
-		var account = data.user;
-		User.findOne({user:account}, (err, res) => {
-			if(res){
-				console.log(res);
-				var passwrd = res.pswd;
-				if(data.pswd === passwrd){
-					this.emit("Chatroom", account);
-					console.log("login success");
-				}
-				else{
-					this.emit("Loginfail");
-					console.log("login faile");
-				}
-			}
-		});
-	}
-	
-	regist(data){
-		var account = data.user;
-		User.findOne({user:account}, (err, res) => {
-			if(!res){
-				console.log("no data");
-				const newaccount = new User(data);
-				newaccount.save();
-				this.emit("Chatroom", account);
-				console.log("regist and login");
-			}
-			else{
-				console.log("already exist");
-			}
-		});
-		
-		//var check = User.find(data, function(err, res) {});
 	}
 }
 

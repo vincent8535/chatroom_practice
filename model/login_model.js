@@ -6,7 +6,7 @@ module.exports = function login(data){
 	let result = {}
 	return new Promise((resolve, reject) => {
 		var account = data.user;
-		User.findOne({user:account}, (err, res) => {
+		User.findOne({user:account}, (err, res) => { //比對資料
 			if(err){
 				console.log(err);
 				result.status = "Login Fail";

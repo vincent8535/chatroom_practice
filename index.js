@@ -8,9 +8,11 @@ const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const path = require('path');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; //設定port
 
 let onlineCount = 0;
+
+//中間件
 //app.set('view', path.join(__dirname, 'view'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,23 +21,24 @@ app.use(bodyParser.text());
 
 
  
-app.use(cookieParser('sessiontest'));
+app.use(cookieParser('sessiontest')); //session 設定
 app.use(session({
- secret: 'sessiontest',//与cookieParser中的一致
+ secret: 'sessiontest', //与cookieParser中的一致
  resave: true,
  saveUninitialized:true
 }));
 
-app.use(router);
+app.use(router); //使用router
 
-io.on('connection', (socket) => {
+
+io.on('connection', (socket) => { //client連線
 	console.log('Hello');
 	onlineCount++;
 	
 	io.emit("online", onlineCount);
 	socket.emit("maxStorage", storage.getMax());
 	
-	storage.get((msgs) => {
+	storage.get((msgs) => { 
 		socket.emit("chatStorage", msgs);
 	});
 	
@@ -50,7 +53,7 @@ io.on('connection', (socket) => {
 
 	});
 	
-	socket.on('disconnect', () => {
+	socket.on('disconnect', () => { //使用者斷線
 		onlineCount= (onlineCount < 0) ? 0 : onlineCount-=1;
 		io.emit("online", onlineCount);
 		console.log('Bye~');
@@ -62,6 +65,7 @@ storage.on("new_message", (msg) => {
 	io.emit("msg", msg);
 });
 
+//啟動server
 server.listen(PORT, () => {
 	console.log("app run on port ${PORT}");
 });
