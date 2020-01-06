@@ -94,19 +94,22 @@
 				var msg = document.createTextNode(d.msg);
 				var dateBox = document.createElement("span")
 					dateBox.className = "date";
-				var month = d.time.substring(5,7);
-				if(month.charAt(0)==="0"){
-					month=month.substring(1);
+				var Time = d.time;
+				if(d.time.length >13){
+					var month = d.time.substring(5,7);
+					if(month.charAt(0)==="0"){
+						month=month.substring(1);
+					}
+					var day = d.time.substring(8,10);
+					if(day.charAt(0) ==="0"){
+						day = day.substring(1);
+					}
+					var time = d.time.substring(11,16);
+					if(time.charAt(0) ==="0"){
+						time = time.substring(1);
+					}
+					Time = month.concat("/",day,"/",time);
 				}
-				var day = d.time.substring(8,10);
-				if(day.charAt(0) ==="0"){
-					day = day.substring(1);
-				}
-				var time = d.time.substring(11,16);
-				if(time.charAt(0) ==="0"){
-					time = time.substring(1);
-				}
-				Time = month.concat("/",day,"/",time);
 				var date = document.createTextNode(Time);
 				console.log(date);
 				dateBox.appendChild(date);
@@ -127,7 +130,6 @@
 			function rmMsgFromBox(){
 				var childs = content.children;
 				childs[0].remove();
-				online.innerText = childs.length;
 			}
 			
 			socket.on("chatStorage", function (msgs) {
