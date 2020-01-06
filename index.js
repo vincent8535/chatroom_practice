@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const path = require('path');
-
+const PORT = process.env.PORT || 3000;
 
 let onlineCount = 0;
 //app.set('view', path.join(__dirname, 'view'));
@@ -62,6 +62,6 @@ storage.on("new_message", (msg) => {
 	io.emit("msg", msg);
 });
 
-server.listen(3000, () => {
-	console.log("Server Started. http://localhost:3000");
+server.listen(PORT, () => {
+	console.log("app run on port ${PORT}");
 });
