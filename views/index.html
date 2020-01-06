@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>新增會員資料</title>
+</head>
+<body>
+
+	<form action="/login" method="post" name="formAdd" id="formAdd">
+	請輸入帳號：<input type="text" name="user" id="user"><br/>
+	請輸入密碼：<input type="password" name="pswd" id="pswd"><br/>
+	<input type="submit" id="login" value="登入" >
+	<input type="button" id="regist" value="註冊">
+	</form>
+	
+	<script>
+		/*document.addEventListener("DOMContentLoaded", () => {
+			var formAdd = document.getElementById("formAdd");
+			formAdd.addEventListener("submit", function(e){
+				e.preventDefault();
+				var formData = {};
+				var formchild = formAdd.children;
+				for(var i = 0; i < formAdd.childElementCount; i++){
+					var child = formchild[i];
+					if (child.name !== ""){
+						var val = child.value;
+						if(val === "" || !val) {
+							child.classList.add("error");
+						}
+						else{
+							child.classList.remove("error");
+							formData[child.name] = val;
+						}
+					}
+				}
+				console.log("login");
+				socket.emit("login", formData);
+			});
+			document.getElementById("regist").addEventListener("click", function(e){
+				e.preventDefault();
+				var formData = {};
+				var formchild = formAdd.children;
+				for(var i = 0; i < formAdd.childElementCount; i++){
+					var child = formchild[i];
+					if (child.name !== ""){
+						var val = child.value;
+						if(val === "" || !val) {
+							child.classList.add("error");
+						}
+						else{
+							child.classList.remove("error");
+							formData[child.name] = val;
+						}
+					}
+				}
+				console.log("regist");
+				socket.emit("regist", formData);
+			});
+			socket.on("maxStorage", function (amount) {
+				console.log("try access");
+			});
+		});*/
+	</script>
+</body>
+</html>

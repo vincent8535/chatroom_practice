@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backstage</title>
+</head>
+<body>
+    <div id="container">
+        <div id="status-box">Server: <span id="status">-</span> / <span id="online">0</span> online.</div>
+        <div id="content">
+        </div>
+        <div id="send-box">
+            <form action="/member" method="post" name="formAdd" id="formAdd">
+				請輸入帳號：<input type="text" name="user" id="user" required><br/>
+				請輸入密碼：<input type="password" name="pswd" id="pswd" required><br/>
+				請輸入權限: <select name="permision" id="permision">
+				<option value="author">author</option>
+				<option value="normal">normal</option>
+				<input type="submit" id="login" value="註冊" >
+	</form>
+        </div>
+		<form action="/logout" method="get" id="logout">
+			<input type="submit" value="logout" name="submit" id="logout_submit">
+		</form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+			var result = <%- JSON.stringify(member) %>
+			var content = document.getElementById("content");
+			for( var i=0; i<result.length; i++){
+				createmember(result[i]);
+			}
+			//console.log(checkchange(updatebtn));
+			
+			function createmember(data){
+				var memberBox = document.createElement("div")
+					memberBox.className = "member";
+					memberBox.id = data.user;
+				var nameBox = document.createElement("div")
+					nameBox.className = "name";
+				var name = document.createTextNode(data.user);
+				var pswdBox = document.createElement("div")
+					pswdBox.className = "pswdbox";
+				var password = document.createElement("input");
+					password.value = data.pswd
+					password.className = "pswd";
+				var pmsBox = document.createElement("div")
+					pmsBox.className = "permisionbox";
+				var permision = document.createElement("input")
+					permision.value = data.permision
+					permision.className ="permision";
+				var updatebtn = document.createElement("button")
+					updatebtn.innerHTML = "更新"
+					updatebtn.className = "update"
+					 
+				var deletebtn = document.createElement("button")
+					deletebtn.innerHTML = "刪除"
+					deletebtn.className = "delete"
+				
+				nameBox.appendChild(document.createTextNode("USER:   "));
+				nameBox.appendChild(name);
+				memberBox.appendChild(nameBox);
+				
+				pswdBox.appendChild(document.createTextNode("Password: "));
+				pswdBox.appendChild(password);
+				memberBox.appendChild(pswdBox);
+				
+				pmsBox.appendChild(document.createTextNode("Permision: "));
+				pmsBox.appendChild(permision);
+				memberBox.appendChild(pmsBox);
+				memberBox.appendChild(updatebtn);
+				memberBox.appendChild(deletebtn);
+				content.appendChild(memberBox);
+				updatebtn.addEventListener("click", function(){
+					if(checkchange(this)){
+						var req = {};
+						var box = this.parentNode;
+						req.user = box.id;
+						req.pswd = box.getElementsByClassName("pswd")[0].value;
+						req.permision = box.getElementsByClassName("permision")[0].value;
+						req = JSON.stringify(req);
+						//console.log(req);
+						var url = document.URL;
+						//console.log(url);
+						var request = new XMLHttpRequest();
+						request.open("PUT",url);
+						request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+						request.responseType = 'json';
+						request.onload = function() {
+						if (request.readyState === request.DONE) {
+							if (request.status === 200) {
+								if(request.response.status ==="Update success"){
+									alert(request.response.status);
+								}
+								else{
+									alert(request.response.status);
+									box.getElementsByClassName("pswd")[0].value =result[box.id].pswd;
+									box.getElementsByClassName("permision")[0].value = result[box.id].permision;
+								}
+							}
+						}
+						};
+						request.send(req);
+					}
+					else{
+						console.log("same");
+					}
+				});
+				deletebtn.addEventListener("click", function(){
+					var req = {};
+					var box = this.parentNode;
+					req.user = box.id;
+					req = JSON.stringify(req);
+					var url = document.URL;
+					var request = new XMLHttpRequest();
+					request.open("DELETE",url);
+					request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+					request.responseType = 'json';
+					request.onload = function() {
+						if (request.readyState === request.DONE) {
+							if (request.status === 200) {
+								console.log(request.response);
+								if(request.response.result.status === "delete success"){
+									content.removeChild(box);
+						
+									alert(request.response.result.status);
+								}
+								else{
+									alert(request.response.result.status);
+									console.log("fail");
+								}
+								
+								console.log(content);
+							}
+						}
+					};
+					
+					request.send(req);
+					
+				});
+			
+			}
+			
+			function checkchange(element){
+				var parent = element.parentNode;
+				var id = result.map(function(item,index, array){return item.user;}).indexOf(parent.id);
+				var newpswd = parent.getElementsByClassName("pswd")[0].value;
+				var newpms = parent.getElementsByClassName("permision")[0].value;
+				if(newpms ==="author" || newpms ==="normal"){
+					if(result[id].pswd !== newpswd && newpswd || result[id].permision !==newpms && newpms){
+						return true
+					}
+				}
+				return false;
+			}
+			
+			
+			
+			
+
+			
+        });
+    </script>
+</body>
+
+</html>
