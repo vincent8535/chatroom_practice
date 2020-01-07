@@ -9,16 +9,29 @@ const getaction = require('../model/get_model');
 module.exports.index = (req, res) => {res.sendFile(rootPath+'/views/index.html');};//首頁
 
 module.exports.chatroom = (req, res) => { //聊天室頁面
-
+	if(req.session.permision ==="normal"){
 	//console.log(req.session.user);
-	res.render('chatroom', {user: req.session.user});
+		res.render('chatroom', {user: req.session.user});
 	//res.sendFile(rootPath+'/view/chatroom.html');
+	}
+	else{
+		req.session.destroy(function(){
+			res.redirect('/');
+		});
+	}
 };
 
 module.exports.backstage = (req, res) =>{ //後台
-	getaction().then((result)=>{
-		res.render('member', {member: result.member});
-	});
+	if(req.session.permision ==="author"){
+		getaction().then((result)=>{
+			res.render('member', {member: result.member});
+		});
+	}
+	else{
+		req.session.destroy(function(){
+			res.redirect('/');
+		});
+	}
 };
 
 module.exports.update = (req, res) => { //更新使用者資料
@@ -44,6 +57,7 @@ module.exports.regist = (req, res) => { //註冊使用者
 	};
 	registaction(data).then((result) => {
 		req.session.user = data.user;
+		req.session.permision = result.userinfo.permision;
 		res.redirect('/chatroom');
 	},(err) => {
 		res.redirect('/');
@@ -59,6 +73,7 @@ module.exports.login = (req, res) => { //登入
 	loginaction(data).then((account) =>{
 		
 		req.session.user = account.userinfo.user;
+		req.session.permision = result.userinfo.permision;
 		if(account.userinfo.permision === "author"){ //管理者權限
 			console.log('tobackstatge');
 			res.redirect('/member');
@@ -97,14 +112,10 @@ module.exports.erase = (req, res) => { //移除帳號
 };
 
 module.exports.logout = (req, res)=> { //登出
-	if(req.session.user){
-		req.session.destroy(function(){
-			res.redirect('/');
-		});
-	}
-	else{
+	req.session.destroy(function(){
 		res.redirect('/');
-	}
+	});
+	
 };
 
 module.exports.add = (req, res)=> {
