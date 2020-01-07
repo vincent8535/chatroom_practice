@@ -34,6 +34,7 @@
 			}
 			
 			function createmember(data){
+				var array = ["author","normal"];
 				var memberBox = document.createElement("div")
 					memberBox.className = "member";
 					memberBox.id = data.user;
@@ -47,9 +48,17 @@
 					password.className = "pswd";
 				var pmsBox = document.createElement("div")
 					pmsBox.className = "permisionbox";
-				var permision = document.createElement("input")
-					permision.value = data.permision
+				var option = document.createElement("option");
+					
+				var permision = document.createElement("select")
 					permision.className ="permision";
+				for(var i = 0; i<array.length;i++){
+					var option = document.createElement("option");
+					option.value = array[i];
+					option.text = array[i];
+					permision.appendChild(option);
+				}
+				permision.value = data.permision
 				var updatebtn = document.createElement("button")
 					updatebtn.innerHTML = "更新"
 					updatebtn.className = "update"

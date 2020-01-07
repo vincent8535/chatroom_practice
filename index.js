@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const path = require('path');
 const PORT = process.env.PORT || 3000; //設定port
+const testrouter = require('./test_router');
 
 let onlineCount = 0;
 
@@ -29,7 +30,7 @@ app.use(session({
 }));
 
 app.use(router); //使用router
-
+app.use(testrouter); //unit test
 
 io.on('connection', (socket) => { //client連線
 	console.log('Hello');

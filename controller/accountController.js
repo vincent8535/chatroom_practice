@@ -1,4 +1,3 @@
-const User = require('../model/memberschema.js');
 const path = require('path');
 const loginaction = require('../model/login_model');
 const rootPath = path.resolve(__dirname, '..');
@@ -58,36 +57,19 @@ module.exports.login = (req, res) => { //登入
 	};
 	console.log('login');
 	loginaction(data).then((account) =>{
-		if(account.pswd === data.pswd){
-			/*res.json({
-				result:{
-					status: "Login sucess",
-					User: account.user,
-					permision:account.permision
-				}
-			});*/
-			req.session.user = account.user;
-			console.log(account.permision);
-			if(account.permision === "author"){ //管理者權限
-				console.log('tobackstatge');
-				res.redirect('/member');
+		
+		req.session.user = account.userinfo.user;
+		if(account.userinfo.permision === "author"){ //管理者權限
+			console.log('tobackstatge');
+			res.redirect('/member');
 				
-			}
-			else{
-				console.log("tochatroom");
-				res.redirect('/chatroom');
-				
-			}
 		}
 		else{
-			/*res.json({
-				result:{
-					status: "Login Faile",
-					err: "Wrong password"
-				}
-			});*/
-			res.redirect('/');
+			console.log("tochatroom");
+			res.redirect('/chatroom');
+				
 		}
+		
 	},(err) => {
 			/*res.json({
 				err: err
