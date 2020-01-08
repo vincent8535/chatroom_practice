@@ -71,9 +71,9 @@ module.exports.login = (req, res) => { //登入
 	};
 	console.log('login');
 	loginaction(data).then((account) =>{
-		
+
 		req.session.user = account.userinfo.user;
-		req.session.permision = result.userinfo.permision;
+		req.session.permision = account.userinfo.permision;
 		if(account.userinfo.permision === "author"){ //管理者權限
 			console.log('tobackstatge');
 			res.redirect('/member');

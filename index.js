@@ -30,7 +30,7 @@ app.use(session({
 }));
 
 app.use(router); //使用router
-app.use(testrouter); //unit test
+//app.use(testrouter); //unit test
 
 io.on('connection', (socket) => { //client連線
 	console.log('Hello');
